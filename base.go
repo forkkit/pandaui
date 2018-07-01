@@ -1,26 +1,19 @@
 package slugui
 
+// error constants.
+const (
+	ErrSurfaceIsRoot = Error("Surface is a root node, can not be used for Components")
+)
+
+// Error implements a custom error type for package to
+// provide consistency and constancy of type and value.
+type Error string
+func (e Error) Error() string {
+	return string(e)
+}
 
 // HTML defines a type to represent a rendered html markup.
 type HTML string
-
-// EventBind defines a interface to be implemented for
-// event watching, interaction and removal.
-type EventBind interface{
-	// Remove removes event name from watched list.
-	Remove(string)
-	
-	// Has returns true/false if giving event is being watched.
-	Has(string) bool
-	
-	// Add adds giving event into watching list with associated
-	// states.
-	Add(name string, preventDefault bool, stopPropagation bool)
-}
-
-type DataBind interface{}
-
-type AttrBind interface{}
 
 // Tag defines an interface which defines a single method
 // that returns desired tag name.
@@ -59,43 +52,11 @@ type Component interface{
 	Renderable
 }
 
+// Element defines a function which takes a Surface for
+// internal operation and application.
+type Element func(*Surface) error
+
 // Elemental defines a associated type which giving
 // a provided surface will return an Element type.
-type Elemental func(Surface, ...Elemental) Surface
-
-// NSurface defines the interaction layer which handles the update
-// and rendering sequences for handling defined component data and
-// event management.
-//type NSurface interface {
-//	Node() Node
-//
-//	Data() DataBind
-//	Attr() AttrBind
-//	Events() EventBind
-//
-//	Upgrade(Surface) Surface
-//	Use(Component) error
-//	Render(...Elemental) error
-//}
-
-// Surface represents the means by which a giving component interacts
-// with it's rendering layer and associated DOM API.
-type Surface struct{
-	Root *Surface
-	Next *Surface
-	LastChild *Surface
-	FirstChild *Surface
-	
-	RootNode Node
-	Data DataBind
-	Attrs AttrBind
-}
-
-// NewSurface returns a new Surface instance using the provided node as
-// it's root source.
-func NewSurface(root Node) *Surface {
-	return &Surface{RootNode: root}
-}
-
-
+type Elemental func(...Element) Element
 
