@@ -167,6 +167,7 @@ type DataBind struct {
 	computations map[string]computation
 }
 
+Subscribe(string) EventSubscriber
 func Redux() *DataBind {
 	return &DataBind{
 		lastValues:   make(map[string]interface{}),
