@@ -31,7 +31,7 @@ type NodeEvent interface {
 // EventPublisher defines an interface which represents a pub-sub
 // system for node structures.
 type EventPublisher interface {
-	es.Subscription
+	es.EventStream
 	Trigger(string, interface{}, map[string]interface{})
 }
 
